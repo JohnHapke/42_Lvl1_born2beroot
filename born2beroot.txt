@@ -1,0 +1,296 @@
+Explanations for theory part:
+
+---
+
+### 1. **How does a virtual machine work?**
+   - A virtual machine (VM) is software that emulates a physical computer. It allows users to run an operating system (guest OS) inside another operating system (host OS). The VM uses resources like CPU, memory, and storage from the host, but operates in isolation from it. This is achieved using virtualization software like VirtualBox, VMware, or KVM.
+
+---
+
+### 2. **What is your choice of operating system?**
+     - **Debian**: A popular open-source Linux distribution known for its stability and flexibility, often used for servers and desktops.
+
+---
+
+### 3. **What are the basic differences between Rocky Linux and Debian?**
+   - **Rocky Linux**:
+     - Derived from RHEL.
+     - Uses the **DNF** package manager.
+     - Focuses on enterprise-level stability.
+   - **Debian**:
+     - Independent Linux distribution.
+     - Uses the **APT** package manager.
+     - Known for flexibility and a larger variety of software packages.
+
+---
+
+### 4. **What is the purpose of virtual machines?**
+   - Virtual machines serve several purposes:
+     - **Testing and Development**: Developers can test software in isolated environments.
+     - **Server Consolidation**: Multiple VMs can run on a single physical server to save resources.
+     - **Legacy Applications**: VMs can run older operating systems for compatibility.
+     - **Isolation and Security**: Each VM is sandboxed, so issues in one do not affect others.
+
+---
+
+### 5. **What are SELinux and DNF?** (Rocky-specific)
+   - **SELinux (Security-Enhanced Linux)**:
+     - A security module for Linux that enforces strict access control policies to restrict what processes can access.
+   - **DNF (Dandified Yum)**:
+     - A package manager for RPM-based distributions, replacing Yum. It handles software installation, updates, and dependency management more efficiently.
+
+---
+
+### 6. **What are the differences between aptitude and apt?** (Debian-specific)
+   - **Aptitude**:
+     - A more interactive package management tool, with both command-line and text-based UI.
+     - Better for resolving complex dependency issues.
+   - **Apt**:
+     - A simpler, faster command-line package manager commonly used in Debian and Ubuntu.
+     - Less resource-intensive than aptitude.
+
+   - **What is AppArmor?**
+     - AppArmor (Application Armor) is a Linux security module that enforces access control policies on applications. It restricts what files or resources a program can access, enhancing security.
+
+---
+
+### **Simple Setup**
+1. **Does the machine launch without a graphical environment?**
+   - Ensure a password is required to connect, and the connection is made with a non-root user.
+   -> ls /usr/bin/*session
+   
+2. **Is the UFW service started?**
+   - Verify that the Uncomplicated Firewall (UFW) is running.
+   sudo ufw status
+   sudo service ufw status
+   Explanation:
+   UFW (Uncomplicated Firewall) is a user-friendly 
+   firewall management tool for Linux systems, specifically designed to simplify
+   the process of configuring and managing a firewall. 
+   It is commonly used on systems that rely on iptables 
+   (the underlying Linux firewall tool) but provides a much easier interface for users.
+
+3. **Is the SSH service started?**
+   - Confirm that SSH is active and functioning.
+   sudo service ssh status
+	SSH (Secure Shell) is a protocol used to securely connect to a remote computer or server over an unsecured network. It provides a secure channel for communication by encrypting the data, making it an essential tool for
+	system administrators, developers, and anyone managing remote systems.
+	
+4. **Is the chosen operating system Debian or Rocky?**
+   - Verify and confirm the operating system used.
+   uname -v || uname --kernel-version
+
+---
+
+### **User**
+1. **Is there a user with the evaluated student’s login?**
+   - Check if the user exists on the virtual machine and is part of the "sudo" and "user42" groups.
+	getent group sudo
+	getent group user42
+	
+2. **Are the password policy rules implemented correctly?**
+   - Create a new user and assign a password that complies with the specified rules. Ask the student to explain how they set up the password policies.
+	sudo adduser name_user
+	
+3. **Can the student create a group named "evaluating"?**
+   - Confirm that the new group exists and the user is assigned to it.
+	1. sudo addgroup evaluating
+	2. sudo adduser name_user evaluating
+	3. getent group evaluating
+	
+4. **Can the student explain the password policy?**
+   - Ask for an explanation of its advantages and disadvantages. Answers like "because the subject asks for it" are not valid.
+	Explanation:
+	The password policy ensures that users set strong, secure passwords to reduce the risk of unauthorized access.
+	Advantages:
+    - Improved Security: Enforces strong passwords, making it harder for attackers to guess or brute-force them.
+    - Compliance: Helps the system align with security standards and best practices, which may be required in organizational or legal contexts.
+    - Reduces Vulnerability: By requiring regular password changes, it limits the potential damage if a password is compromised.
+Disadvantages:
+    - User Frustration: Complex rules can make passwords harder to remember, leading to frustration or unsafe practices (like writing them down).
+    - Administrative Overhead: Enforcing and managing password policies can increase the workload for administrators.
+    - Potential for Weak Workarounds: Users may resort to predictable patterns (e.g., "Password123!") to meet the policy while keeping the password easy to remember.
+---
+
+### **Hostname and Partitions**
+1. **Is the hostname correctly formatted (e.g., login42)?**
+   - Verify the initial hostname and ensure it is updated correctly upon restart.
+	1. hostname
+	2. sudo nano /etc/hostname -> change name
+	3. sudo nano /etc/hosts -> change name
+	4. sudo reboot
+	5. hostname
+	
+2. **Can the student restore the machine to the original hostname?**
+   - Check if the machine can revert to the previous hostname.
+	same procedure -> 1.
+	
+3. **Can the student display the partitions of the virtual machine?**
+   - Verify that the partition details match the example provided.
+	lsblk
+	
+4. **Can the student explain LVM?**
+   - Request a brief explanation of Logical Volume Manager (LVM), its purpose, and functionality.
+	Explanation:
+	LVM (Logical Volume Manager) is a system for managing disk storage in Linux. It provides a flexible and efficient way to manage hard drive partitions and storage space, 
+	offering more advanced features compared to traditional partitioning methods.
+	How LVM works?
+	Physical Volumes (PVs):
+    -> These are the actual physical storage devices or partitions on your system.
+	Volume Groups (VGs):
+    -> A pool of storage created by combining multiple physical volumes. Think of it as a container for storage.
+	Logical Volumes (LVs):
+    -> These are the partitions created within a volume group. They function like traditional partitions but are much more flexible.
+	When to use LVM?
+	- When managing systems that require frequent resizing of storage or flexibility in partitioning.
+	- When running systems with multiple disks and requiring pooling of storage resources.
+---
+
+Here are the questions extracted from the image, organized by their respective topics:
+
+---
+
+### **SUDO**
+1. Is the `sudo` program properly installed on the virtual machine?
+	dpkg -s sudo
+	
+2. Can the student assign their new user to the `sudo` group?
+	sudo adduser name_user sudo
+	
+3. Can the student explain the value and operation of `sudo` using examples of their choice?
+	Explanation:
+	"sudo" stands for "superuser do." It is a Linux command that allows a user to run commands with administrative (root) privileges temporarily. 
+	Instead of logging in as the root user, a regular user can perform administrative tasks securely.
+	Value:
+	- Security: Prevents users from staying logged in as root, reducing the risk of accidental or harmful system-wide changes.
+	- Accountability: Logs every command executed with sudo in /var/log/sudo/ or /var/log/auth.log, which enhances system auditing.
+	- Granularity: Allows system administrators to delegate specific administrative tasks to users without giving full root access.
+	Examples:
+	- Updating System Packages sudo apt update && sudo apt upgrade
+	- Editing System Configuration Files sudo nano /etc/hosts
+	- Restarting a Service sudo systemctl restart ssh
+	
+4. Can the student demonstrate the implementation of the rules imposed by the subject for `sudo`?
+	1. cd /var/log/sudo
+	2. nano /etc/sudoers.d/sudo_config
+	
+5. Does the `/var/log/sudo/` folder exist and contain at least one file?
+	1. cd /var/log/sudo
+	2. ls
+	
+6. Can you check the contents of the files in `/var/log/sudo/` to see the history of commands used with `sudo`?
+	1. cd /var/log/sudo
+	2. cat sudo_config
+7. Can the student run a command using `sudo` and verify that the file(s) in `/var/log/sudo/` have been updated?
+	1. cd /var/log/sudo
+	2. sudo nano example.txt
+	3. cat sudo_config
+---
+
+### **UFW / Firewall**
+1. Is the `UFW` (or Firewall for Rocky) program properly installed on the virtual machine?
+	dpkg -s ufw
+	
+2. Is the firewall working properly?
+	sudo service ufw status
+	
+3. Can the student explain what `UFW` (or Firewall) is and its value?
+	The firewall’s main purpose is to protect systems or networks from unauthorized access, malicious traffic, or cyber attacks by filtering the traffic based on specific security policies.
+	The Value of UFW/Firewall: The value of a firewall (including UFW) lies in its ability to:
+    - Control traffic: It can block or permit certain types of network traffic, preventing unauthorized access to the system.
+    - Prevent attacks: A firewall can block malicious network traffic, like DDoS (Distributed Denial of Service) attacks or attempted breaches from hackers.
+    - Enhance privacy: By restricting access to specific services and ports, firewalls can reduce the risk of data breaches and enhance privacy.
+    - Traffic monitoring: It can be configured to log traffic for monitoring purposes, which is important for identifying potential security threats.
+
+4. Can the student list the active rules in `UFW` (or Firewall), verifying that a rule exists for port 4242?
+	sudo ufw status numbered
+	
+5. Can the student add a new rule to open port 8080, and does it show up in the list of active rules?
+	1. sudo ufw allow 8080
+	2.sudo ufw status numbered
+	
+6. Can the student delete the newly added rule with your assistance?
+	1. sudo ufw delete num_rule
+	2. sudo ufw status numbered
+
+---
+
+### **SSH**
+1. Is the SSH service properly installed on the virtual machine?
+	which ssh
+	
+2. Is SSH working properly?
+	sudo service ssh status
+	
+3. Can the student explain what SSH is and its value?
+	Explanation: 
+	- SSH is a cryptographic network protocol used for securely accessing and managing devices over an unsecured network, such as the internet. It allows users to connect to remote systems and execute commands, transfer files, or manage services securely.
+	- SSH encrypts the communication between the client and the server, making it much more secure compared to other methods like Telnet or FTP, which transmit data in plaintext.
+	How does SSH work?
+	1. Client-Server Model: The user (client) connects to a remote machine (server) via an SSH client.
+    2. Authentication: Before access is granted, the client must authenticate itself, typically using:
+		- Password-based authentication (less secure, but simple).
+		- Public-key authentication (more secure, uses a pair of keys: private and public).
+    3. Encryption: All data exchanged between the client and server is encrypted, ensuring that even if someone intercepts the communication, they won’t be able to read it.
+	The Value of SSH
+	The value of SSH lies in its ability to provide secure, remote access to servers and systems in a variety of ways:
+    - Secure Communication: SSH ensures that data transmitted between the client and server is encrypted, protecting sensitive information from being intercepted.
+    - Remote Management: System administrators can manage remote servers and devices as though they were directly connected to them, making it easy to configure servers, troubleshoot issues, or perform updates.
+    - File Transfer: SSH enables secure file transfers through protocols like SFTP (SSH File Transfer Protocol) and SCP (Secure Copy Protocol).
+    - Port Forwarding: SSH allows secure tunneling of other network services through encrypted channels (e.g., forwarding database connections, web traffic).
+    - Strong Authentication: SSH supports strong, key-based authentication, reducing the risks associated with weak or stolen passwords.
+4. Does the SSH service only use port 4242?
+	sudo service ssh status
+	
+5. Can the student help you use SSH to log in with the newly created user?
+	ssh "new_user"@localhost -p [used port in host]
+	
+6. Can you confirm that SSH cannot be used with the `root` user?
+	1. ssh root@localhost -p [used port in host]
+	2. failure in password
+	3. sudo service ssh status -> to control what happened
+
+---
+
+Based on the image, here are the evaluation questions that need to be checked:
+
+Script Monitoring Section:
+1. Did the student demonstrate and explain their script's code?
+2. Did they explain what "cron" is?
+3. Did they show how they set up their script to:
+	1. sudo crontab -u root -e
+   - Run every 10 minutes from server start
+   -> first parameter has to be 10
+   - Modify it to run every minute after verification
+   -> first parameter has to be 1
+   - Stop running at server startup without modifying the script
+   -> sudo /etc/init.d/cron stop
+   -> to return to execution: sudo /etc/init.d/cron start
+   
+4. After server restart, can you verify:
+   - The script still exists in the same location
+   - The script's rights remain unchanged
+   - The script hasn't been modified
+
+Bonus Section (only if mandatory part is perfect):
+1. Did they set up partitions? (2 points)
+	lsblk
+	
+2. Did they set up WordPress with only the required services? (2 points)
+	web browser -> localhost:[used port in host]
+	
+3. Did they implement a free choice service (excluding NGINX and Apache2)?
+   - Does it function properly?
+   - Did they explain how it works and why it's useful? (1 point)
+	FTP (File Transfer Protocol) is a standard network protocol used for transferring files
+	between a client and a server on a computer network. Let me explain how it works and its usefulness:
+	How FTP Works:
+	- Uses two connections: control (port 21) and data (port 20)
+	- Requires username/password authentication
+	- Transfers files between client and server
+	Why FTP is Useful:
+	- Upload/download files to/from servers
+	- Manage website content
+	- Transfer large files
+	- Organize files and folders remotely
+	- Cross-platform compatibility
